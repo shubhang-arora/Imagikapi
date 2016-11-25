@@ -21,20 +21,29 @@ class UploadController extends Controller
 
     public function uploads(Request $request)
     {
-        $validator = Validator::make($request->file(),[
-            'file'   =>  'required|image'
+
+        /*$validator = Validator::make($request->file(),[
+            'base'   =>  'required'
         ]);
 
         if($validator->fails()) {
             throw new ValidationHttpException($validator->errors()->all());
-        }
-        $types = array('jpeg', 'png' ,'jpg');
-        $file = $request->file('file');
+        }*/
+        $output_file = $request->input('output_file');
+      //  $types = array('jpeg', 'png' ,'jpg');
+      //  $file = base64_decode($request->input('base'));
+        $ifp = fopen( $output_file, "wb" );
+        fwrite( $ifp, base64_decode( $request->input('base')) );
+        fclose( $ifp );
+        $destinationPath = 'uploads';
+        $link = $destinationPath . '/' . $output_file;
+       // return( $output_file );
+        //dd($file);
 
         // $size = $file->getClientSize();
-        $fileFormat = $file->getClientOriginalExtension();
+      //  $fileFormat = $file->getClientOriginalExtension();
 
-        if(in_array($fileFormat, $types)) {
+      /*  if(in_array($fileFormat, $types)) {
 
             $time = Carbon::now()->format('m_d_y_h_i_s_a');
             $filename = $time . '.' . $fileFormat;
@@ -80,6 +89,6 @@ class UploadController extends Controller
 
             $result = ($response["results"][0]["result"]["tag"]["classes"]);
             return json_encode($result);
-        }
+        }*/
     }
 }
