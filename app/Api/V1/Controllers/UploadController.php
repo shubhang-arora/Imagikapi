@@ -22,14 +22,9 @@ class UploadController extends Controller
     public function uploads(Request $request)
     {
 
-        /*$validator = Validator::make($request->file(),[
-            'base'   =>  'required'
-        ]);
 
-        if($validator->fails()) {
-            throw new ValidationHttpException($validator->errors()->all());
-        }*/
         $output_file = $request->input('output_file');
+
       //  $types = array('jpeg', 'png' ,'jpg');
       //  $file = base64_decode($request->input('base'));
         $ifp = fopen( $output_file, "wb" );
@@ -37,6 +32,7 @@ class UploadController extends Controller
         fclose( $ifp );
         $destinationPath = 'uploads';
         $link = $destinationPath . '/' . $output_file;
+
        // return( $output_file );
         //dd($file);
 
@@ -50,7 +46,7 @@ class UploadController extends Controller
             $destinationPath = 'uploads';
             $link = $destinationPath . '/' . $filename;
             $status = move_uploaded_file($file,$link);
-
+*/
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
@@ -70,6 +66,7 @@ class UploadController extends Controller
 
             $json_response = json_decode(curl_exec($curl), true);
             $access_token = $json_response["access_token"];
+
             curl_close($curl);
 
             $image = curl_init();
@@ -86,9 +83,9 @@ class UploadController extends Controller
             ));
 
             $response = json_decode(curl_exec($image), true);
-
             $result = ($response["results"][0]["result"]["tag"]["classes"]);
-            return json_encode($result);
-        }*/
-    }
+            return $result;
+          //  return json_encode($result);
+        }
+
 }
